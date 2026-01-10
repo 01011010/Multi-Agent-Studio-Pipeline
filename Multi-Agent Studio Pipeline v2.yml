@@ -1,0 +1,2440 @@
+app:
+  description: End-to-end screenplay ingestion with RAG, dynamic agent hiring, peer
+    review loops, and executive decision workflow.
+  icon: 🤖
+  icon_background: '#6366F1'
+  mode: workflow
+  name: Multi-Agent Studio Pipeline v2
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/openai:0.2.8@aae2be0913b8c6f0b80cff58e08d7a8b4c214569b41778413fcaea204561ff16
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: yevanchen/markitdown:0.0.4@776b3e2e930e2ffd28a75bb20fecbe7a020849cf754f86e604acacf1258877f6
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .pdf
+      - .txt
+      - .doc
+      - .docx
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: true
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 1
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: studio_architect-technical_team
+      selected: false
+      source: studio_architect
+      sourceHandle: source
+      target: technical_team
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: studio_architect-creative_team
+      selected: false
+      source: studio_architect
+      sourceHandle: source
+      target: creative_team
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: studio_architect-stunts_team
+      selected: false
+      source: studio_architect
+      sourceHandle: source
+      target: stunts_team
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: studio_architect-vfx_team
+      selected: false
+      source: studio_architect
+      sourceHandle: source
+      target: vfx_team
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: studio_architect-legal_team
+      selected: false
+      source: studio_architect
+      sourceHandle: source
+      target: legal_team
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: technical_team-peer_review_agg
+      source: technical_team
+      sourceHandle: source
+      target: peer_review_aggregator
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: creative_team-peer_review_agg
+      source: creative_team
+      sourceHandle: source
+      target: peer_review_aggregator
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: stunts_team-peer_review_agg
+      source: stunts_team
+      sourceHandle: source
+      target: peer_review_aggregator
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: vfx_team-peer_review_agg
+      source: vfx_team
+      sourceHandle: source
+      target: peer_review_aggregator
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: legal_team-peer_review_agg
+      source: legal_team
+      sourceHandle: source
+      target: peer_review_aggregator
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: llm
+      id: peer_review_agg-peer_review_loop
+      source: peer_review_aggregator
+      sourceHandle: source
+      target: peer_review_loop
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: peer_review_loop-continuity_auditor
+      source: peer_review_loop
+      sourceHandle: source
+      target: continuity_auditor
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: budget_simulator-integrity_gatekeeper
+      source: budget_simulator
+      sourceHandle: source
+      target: integrity_gatekeeper
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: continuity_auditor-integrity_gatekeeper
+      source: continuity_auditor
+      sourceHandle: source
+      target: integrity_gatekeeper
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: integrity_gatekeeper-risk_dashboard
+      source: integrity_gatekeeper
+      sourceHandle: source
+      target: risk_dashboard
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: llm
+      id: risk_dashboard-executive_reporting
+      source: risk_dashboard
+      sourceHandle: source
+      target: executive_reporting
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: executive_reporting-end
+      source: executive_reporting
+      sourceHandle: source
+      target: end
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: tool
+      id: start-source-1767960093838-target
+      selected: false
+      source: start
+      sourceHandle: source
+      target: '1767960093838'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: llm
+      id: 1767960093838-source-story_triage-target
+      selected: false
+      source: '1767960093838'
+      sourceHandle: source
+      target: story_triage
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: template-transform
+        targetType: end
+      id: peer_review_aggregator-source-1767960664055-target
+      source: peer_review_aggregator
+      sourceHandle: source
+      target: '1767960664055'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: studio_architect-source-1767961107938-target
+      selected: false
+      source: studio_architect
+      sourceHandle: source
+      target: '1767961107938'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: peer_review_loop-source-budget_simulator-target
+      source: peer_review_loop
+      sourceHandle: source
+      target: budget_simulator
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: budget_simulator-source-1767968096011-target
+      source: budget_simulator
+      sourceHandle: source
+      target: '1767968096011'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1767973078202-source-budget_simulator-target
+      source: '1767973078202'
+      sourceHandle: source
+      target: budget_simulator
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: peer_review_loop-source-1767984099372-target
+      source: peer_review_loop
+      sourceHandle: source
+      target: '1767984099372'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: knowledge-retrieval
+      id: 1767984099372-source-1767973078202-target
+      source: '1767984099372'
+      sourceHandle: source
+      target: '1767973078202'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: story_triage-source-17680297708350-target
+      selected: false
+      source: story_triage
+      sourceHandle: source
+      target: '17680297708350'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 17680297708350-source-1767960017402-target
+      selected: false
+      source: '17680297708350'
+      sourceHandle: source
+      target: '1767960017402'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: iteration
+      id: 17680335917610-source-1768045656157-target
+      selected: false
+      source: '17680335917610'
+      sourceHandle: source
+      target: '1768045656157'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1768045656157'
+        sourceType: iteration-start
+        targetType: llm
+      id: 1768045656157start-source-1768046041551-target
+      selected: false
+      source: 1768045656157start
+      sourceHandle: source
+      target: '1768046041551'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1768045656157'
+        sourceType: iteration-start
+        targetType: variable-aggregator
+      id: 1768045656157start-source-1768071367930-target
+      source: 1768045656157start
+      sourceHandle: source
+      target: '1768071367930'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInLoop: false
+        sourceType: iteration
+        targetType: llm
+      id: 1768045656157-source-17680745966700-target
+      source: '1768045656157'
+      sourceHandle: source
+      target: '17680745966700'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 17680745966700-source-1768074108441-target
+      source: '17680745966700'
+      sourceHandle: source
+      target: '1768074108441'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: story_triage-source-studio_architect-target
+      source: story_triage
+      sourceHandle: source
+      target: studio_architect
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - image
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          default: ''
+          hint: Upload the screenplay file or paste text
+          label: screenplay
+          max_length: 100000
+          options: []
+          placeholder: ''
+          required: true
+          type: file
+          variable: screenplay
+        - default: ''
+          hint: Version identifier for this script
+          label: script_version
+          max_length: 50
+          options: []
+          placeholder: e.g., v1.2 or Draft-3
+          required: true
+          type: text-input
+          variable: script_version
+      height: 135
+      id: start
+      position:
+        x: 0
+        y: 273
+      positionAbsolute:
+        x: 0
+        y: 273
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            frequency_penalty: 0.5
+            json_schema: "{\n  \"name\": \"screenplay_analysis\",\n  \"schema\": {\n\
+              \    \"type\": \"object\",\n    \"additionalProperties\": false,\n \
+              \   \"required\": [\n      \"genre\",\n      \"tone\",\n      \"settingPeriod\"\
+              ,\n      \"productionScale\",\n      \"riskDomains\",\n      \"uniqueLocations\"\
+              ,\n      \"characters\",\n      \"uniqueProps\",\n      \"specialEffectRequirements\"\
+              ,\n      \"otherNotableItems\"\n    ],\n    \"properties\": {\n    \
+              \  \"genre\": {\n        \"type\": \"array\",\n        \"items\": {\
+              \ \"type\": \"string\" }\n      },\n      \"tone\": {\n        \"type\"\
+              : \"array\",\n        \"items\": { \"type\": \"string\" }\n      },\n\
+              \      \"settingPeriod\": {\n        \"type\": \"string\",\n       \
+              \ \"description\": \"The specific era or time period (e.g., 1850s London,\
+              \ Contemporary, Distant Future).\"\n      },\n      \"productionScale\"\
+              : {\n        \"type\": \"string\",\n        \"enum\": [\"Contained\"\
+              , \"Moderate\", \"Large\", \"Epic\"],\n        \"description\": \"Qualitative\
+              \ assessment of logistical complexity.\"\n      },\n      \"riskDomains\"\
+              : {\n        \"type\": \"array\",\n        \"description\": \"Specific\
+              \ areas requiring expert scrutiny or sensitivity review.\",\n      \
+              \  \"items\": {\n          \"type\": \"object\",\n          \"additionalProperties\"\
+              : false,\n          \"required\": [\"domain\", \"justification\", \"\
+              severity\"],\n          \"properties\": {\n            \"domain\": {\
+              \ \"type\": \"string\" },\n            \"justification\": { \"type\"\
+              : \"string\" },\n            \"severity\": { \"type\": \"string\", \"\
+              enum\": [\"low\", \"medium\", \"high\"] }\n          }\n        }\n\
+              \      },\n      \"uniqueLocations\": {\n        \"type\": \"array\"\
+              ,\n        \"items\": { \"type\": \"string\" }\n      },\n      \"characters\"\
+              : {\n        \"type\": \"array\",\n        \"items\": {\n          \"\
+              type\": \"object\",\n          \"additionalProperties\": false,\n  \
+              \        \"required\": [\"name\", \"description\"],\n          \"properties\"\
+              : {\n            \"name\": { \"type\": \"string\" },\n            \"\
+              description\": { \"type\": \"string\" }\n          }\n        }\n  \
+              \    },\n      \"uniqueProps\": {\n        \"type\": \"array\",\n  \
+              \      \"items\": { \"type\": \"string\" },\n        \"description\"\
+              : \"Story-critical objects or tools mentioned in the script.\"\n   \
+              \   },\n      \"specialEffectRequirements\": {\n        \"type\": \"\
+              object\",\n        \"additionalProperties\": false,\n        \"required\"\
+              : [\"vfx_implied\", \"practical_implied\", \"complexity_note\"],\n \
+              \       \"properties\": {\n          \"vfx_implied\": { \"type\": \"\
+              boolean\" },\n          \"practical_implied\": { \"type\": \"boolean\"\
+              \ },\n          \"complexity_note\": { \"type\": \"string\" }\n    \
+              \    }\n      },\n      \"otherNotableItems\": {\n        \"type\":\
+              \ \"array\",\n        \"items\": { \"type\": \"string\" }\n      }\n\
+              \    }\n  }\n}"
+            presence_penalty: 0.5
+            response_format: json_schema
+            temperature: 0.2
+            top_p: 0.75
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: triage-system
+          role: system
+          text: "You are the Story Triage Node.\n\nYour role is to perform an initial\
+            \ diagnostic analysis of a screenplay in order\nto inform downstream creative,\
+            \ technical, and production decision-making.\n\nThis is NOT a coverage\
+            \ report and NOT a creative rewrite.\nYour task is to extract, classify,\
+            \ and infer high-level characteristics of the\nscreenplay that affect\
+            \ feasibility, risk, and development strategy.\n\n========================\n\
+            ANALYSIS PRINCIPLES\n========================\n\n- Base all conclusions\
+            \ strictly on the provided screenplay text\n- Do not invent scenes, characters,\
+            \ or requirements not supported by the script\n- Prefer clear, concrete\
+            \ classifications over vague or poetic language\n- When information is\
+            \ implicit rather than explicit, infer conservatively\n- Treat ethical,\
+            \ cultural, historical, and safety-sensitive material as notable\n\n========================\n\
+            YOU MUST IDENTIFY\n========================\n\nProduce a structured analysis\
+            \ that includes:\n\n- Genre:\n  Narrative and stylistic categories that\
+            \ best describe the screenplay\n\n- Era:\nDefine the specific time period\
+            \ (e.g., Contemporary, 1920s, Far Future).\n\n- Tone:\n  Dominant emotional\
+            \ or thematic tone(s) conveyed by the material\n\n- Production Scale:\n\
+            \  A qualitative assessment of scope (e.g., contained, moderate, large),\
+            \  considering setting, period, cast size, and logistical complexity.\n\
+            \n- Risk Domains:\nIdentify specific areas (e.g., Historical, Cultural,\
+            \ Legal, Safety) and provide a brief justification for why they require\
+            \ expert oversight.\n\n- Unique Locations:\n  Distinct settings that are\
+            \ integral to the story and may impact production\n\n- Characters:\n \
+            \ Principal and notable supporting characters, with brief identifying\
+            \ context  where relevant (role, age range, social position)\n\n- Unique\
+            \ Props or Elements:\n  Story-critical objects, tools, or material elements\
+            \ that may affect production  or symbolism\n\n- Special Effect Requirements:\n\
+            \  Any practical, visual, or technical effects implied or required by\
+            \ the script\n\n- Other Notable Items:\n  Themes, motifs, craftsmanship,\
+            \ social dynamics, or contextual elements that materially influence how\
+            \ the screenplay should be developed or evaluated\n\n========================\n\
+            OUTPUT EXPECTATIONS\n========================\n\n- Be concise but specific\n\
+            - Use neutral, professional analytical language\n- Focus on what matters\
+            \ for downstream planning, not literary interpretation\n- Assume your\
+            \ output will be consumed by automated agents and human reviewers\n"
+        - id: triage-user
+          role: user
+          text: 'Screenplay: {{#1767960093838.text#}}
+
+            Script Version: {{#start.script_version#}}
+
+
+            Analyze the screenplay provided.
+
+            '
+        selected: false
+        title: Initial Analysis
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: story_triage
+      position:
+        x: 664
+        y: 315
+      positionAbsolute:
+        x: 664
+        y: 315
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - story_triage
+          - text
+        model:
+          completion_params:
+            frequency_penalty: 0.5
+            json_schema: "{\n  \"name\": \"studio_architecture_plan\",\n  \"schema\"\
+              : {\n    \"type\": \"object\",\n    \"additionalProperties\": false,\n\
+              \    \"required\": [\n      \"agents_hired\",\n      \"peer_review_rules\"\
+              ,\n      \"escalation_policy\"\n    ],\n    \"properties\": {\n    \
+              \  \"agents_hired\": {\n        \"type\": \"array\",\n        \"minItems\"\
+              : 1,\n        \"description\": \"List of specialized agents or roles\
+              \ required for the project\",\n        \"items\": {\n          \"type\"\
+              : \"object\",\n          \"additionalProperties\": false,\n        \
+              \  \"required\": [\n            \"agent_name\",\n            \"priority\"\
+              ,\n            \"scope\",\n            \"justification\"\n         \
+              \ ],\n          \"properties\": {\n            \"agent_name\": {\n \
+              \             \"type\": \"string\",\n              \"description\":\
+              \ \"Free-form name describing the agent or role\"\n            },\n\
+              \            \"priority\": {\n              \"type\": \"string\",\n\
+              \              \"enum\": [\"critical\", \"high\", \"medium\", \"low\"\
+              ]\n            },\n            \"scope\": {\n              \"type\"\
+              : \"string\",\n              \"description\": \"Specific responsibilities\
+              \ and decision boundaries for this agent\"\n            },\n       \
+              \     \"justification\": {\n              \"type\": \"string\",\n  \
+              \            \"description\": \"Why this agent is required, grounded\
+              \ in the provided analysis\"\n            }\n          }\n        }\n\
+              \      },\n      \"peer_review_rules\": {\n        \"type\": \"object\"\
+              ,\n        \"additionalProperties\": false,\n        \"required\": [\n\
+              \          \"cross_validation_required\",\n          \"review_matrix\"\
+              \n        ],\n        \"properties\": {\n          \"cross_validation_required\"\
+              : {\n            \"type\": \"boolean\"\n          },\n          \"review_matrix\"\
+              : {\n            \"type\": \"array\",\n            \"description\":\
+              \ \"Defines which agents must review or validate each other's work\"\
+              ,\n            \"items\": {\n              \"type\": \"object\",\n \
+              \             \"additionalProperties\": false,\n              \"required\"\
+              : [\n                \"agent\",\n                \"must_be_reviewed_by\"\
+              \n              ],\n              \"properties\": {\n              \
+              \  \"agent\": {\n                  \"type\": \"string\",\n         \
+              \         \"description\": \"Agent whose output requires review\"\n\
+              \                },\n                \"must_be_reviewed_by\": {\n  \
+              \                \"type\": \"array\",\n                  \"minItems\"\
+              : 1,\n                  \"items\": { \"type\": \"string\" }\n      \
+              \          }\n              }\n            }\n          }\n        }\n\
+              \      },\n      \"escalation_policy\": {\n        \"type\": \"object\"\
+              ,\n        \"additionalProperties\": false,\n        \"required\": [\n\
+              \          \"conflict_resolution\",\n          \"human_review_triggers\"\
+              \n        ],\n        \"properties\": {\n          \"conflict_resolution\"\
+              : {\n            \"type\": \"string\",\n            \"enum\": [\n  \
+              \            \"escalate_to_human\",\n              \"architect_final_decision\"\
+              \n            ]\n          },\n          \"human_review_triggers\":\
+              \ {\n            \"type\": \"array\",\n            \"description\":\
+              \ \"Conditions that require mandatory human intervention\",\n      \
+              \      \"items\": {\n              \"type\": \"string\"\n          \
+              \  }\n          }\n        }\n      }\n    }\n  }\n}"
+            presence_penalty: 0.5
+            response_format: json_schema
+            temperature: 0.2
+            top_p: 0.75
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: architect-system
+          role: system
+          text: 'You are THE STUDIO ARCHITECT.
+
+
+            Your role is to design the execution team required to responsibly evaluate,develop,
+            and prepare a screenplay for production, based on a structured analysis
+            provided to you.
+
+
+            You act as a senior studio hiring authority and systems designer.
+
+
+            ========================
+
+            YOUR RESPONSIBILITIES
+
+            ========================
+
+
+            Based solely on the provided analysis, you must:
+
+
+            1. Determine what specialized agents or roles are required
+
+            2. Define each agent’s purpose, scope of responsibility, and priority
+
+            3. Identify areas of risk, complexity, or sensitivity that justify each
+            role
+
+
+            You are NOT constrained to a predefined list of agents.
+
+            You may invent agent roles as needed, provided they are justified by the
+            analysis.
+
+
+            ========================
+
+            DECISION PRINCIPLES
+
+            ========================
+
+
+            - Hire the minimum viable team necessary to address all identified risks
+
+            - Introduce additional agents only when complexity, ethics, safety, execution
+            or scale demand it
+
+            - Treat historical accuracy, cultural representation, and animal-related
+            material as  high-scrutiny domains
+
+            - Assume downstream agents will operate autonomously within their defined
+            scopes
+
+            - Do not invent story elements, locations, or requirements not present
+            in the analysis
+
+
+            ========================
+
+            OUTPUT REQUIREMENTS
+
+            ========================
+
+
+            You MUST output valid JSON only.
+
+            No markdown. No commentary. No explanatory text outside the JSON.
+
+
+            The output must:
+
+            - Be safe to pass directly into downstream agents and automated workflows
+
+            - Contain only agents you have explicitly decided to hire
+
+            - Clearly explain why each agent exists and what they are responsible
+            for'
+        - id: architect-user
+          role: user
+          text: 'Using the following structured screenplay analysis, design the execution
+            team required to responsibly develop and assess the project.
+
+
+            Structured Analysis Input:
+
+            {{#context#}}'
+        selected: false
+        title: 🏗️ Studio Architect
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: studio_architect
+      position:
+        x: 664
+        y: 789
+      positionAbsolute:
+        x: 664
+        y: 789
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - knowledge_ingestion
+          - result
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: tech-system
+          role: system
+          text: "You are the Technical Systems Agent.\n\nUsing {{#context#}} analyze:\
+            \ feasibility, budget impact, safety, schedule, legal exposure.\n\nDo\
+            \ NOT comment on story or characters.\n\nSample Output STRICT JSON:\n\
+            {\n  \"agent_id\": \"technical\",\n  \"issues\": [],\n  \"recommendations\"\
+            : [],\n  \"technical_confidence\": 0,\n  \"estimated_days\": 0\n}\n"
+        - id: tech-user
+          role: user
+          text: 'Scope from Architect:
+
+            {{#studio_architect.text#}}
+
+
+            Analyze the screenplay from the knowledge base.
+
+            '
+        selected: false
+        title: 🔧 Technical Team
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: technical_team
+      position:
+        x: 1026
+        y: 447
+      positionAbsolute:
+        x: 1026
+        y: 447
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - knowledge_ingestion
+          - result
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: creative-system
+          role: system
+          text: "You are the Creative Systems Agent.\n\nUsing {{#context#}} analyze:\
+            \ narrative coherence, tone, world-building, character logic.\n\nDo NOT\
+            \ estimate budget or feasibility.\n\nSample Output STRICT JSON:\n{\n \
+            \ \"agent_id\": \"creative\",\n  \"issues\": [],\n  \"strengths\": [],\n\
+            \  \"creative_confidence\": 0\n}\n"
+        - id: creative-user
+          role: user
+          text: 'Analyze the screenplay from the knowledge base for creative elements.
+
+            '
+        selected: false
+        title: 🎭 Creative Team
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: creative_team
+      position:
+        x: 1026
+        y: 615
+      positionAbsolute:
+        x: 1026
+        y: 615
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - knowledge_ingestion
+          - result
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: stunts-system
+          role: system
+          text: "You are the Stunts Coordinator.\n\nIF hired by the Studio Architect\
+            \ use {{#context#}}:\n- Identify all stunt sequences\n- Assess safety\
+            \ risks (1-10 scale)\n- Estimate stunt team size and equipment\n- Flag\
+            \ insurance concerns\n\nIF NOT hired:\n- Output: {\"agent_id\": \"stunts\"\
+            , \"hired\": false}\n\nOutput STRICT JSON:\n{\n  \"agent_id\": \"stunts\"\
+            ,\n  \"hired\": true/false,\n  \"stunt_sequences\": [],\n  \"safety_risk_score\"\
+            : 0,\n  \"team_size_needed\": 0,\n  \"insurance_flags\": []\n}\n"
+        - id: stunts-user
+          role: user
+          text: 'Architect Decision:
+
+            {{#studio_architect.text#}}
+
+
+            If hired, analyze the screenplay for stunt requirements.
+
+            '
+        selected: false
+        title: 🤸 Stunts Coordinator
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: stunts_team
+      position:
+        x: 1026
+        y: 783
+      positionAbsolute:
+        x: 1026
+        y: 783
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - knowledge_ingestion
+          - result
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: vfx-system
+          role: system
+          text: "You are the VFX Supervisor.\n\nIF hired by the Studio Architect use\
+            \ {{#context#}}:\n- Identify all VFX shots\n- Categorize complexity (simple,\
+            \ medium, complex, impossible)\n- Estimate VFX vendor needs\n- Flag pre-vis\
+            \ requirements\n\nIF NOT hired:\n- Output: {\"agent_id\": \"vfx\", \"\
+            hired\": false}\n\nOutput STRICT JSON:\n{\n  \"agent_id\": \"vfx\",\n\
+            \  \"hired\": true/false,\n  \"vfx_shots\": [],\n  \"complexity_breakdown\"\
+            : {},\n  \"vendor_requirements\": [],\n  \"pre_vis_needed\": false\n}\n"
+        - id: vfx-user
+          role: user
+          text: 'Architect Decision:
+
+            {{#studio_architect.text#}}
+
+
+            If hired, analyze the screenplay for VFX requirements.
+
+            '
+        selected: false
+        title: 🎬 VFX Supervisor
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: vfx_team
+      position:
+        x: 1026
+        y: 951
+      positionAbsolute:
+        x: 1026
+        y: 951
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - knowledge_ingestion
+          - result
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: legal-system
+          role: system
+          text: "You are the Legal Advisor.\n\nIF hired by the Studio Architect use{{#context#}}:\n\
+            - Identify real people, brands, trademarks\n- Flag music/IP clearance\
+            \ needs\n- Assess defamation/libel risks\n- Note location/permit concerns\n\
+            \nIF NOT hired:\n- Output: {\"agent_id\": \"legal\", \"hired\": false}\n\
+            \nOutput STRICT JSON:\n{\n  \"agent_id\": \"legal\",\n  \"hired\": true/false,\n\
+            \  \"clearance_items\": [],\n  \"risk_level\": \"low/medium/high\",\n\
+            \  \"legal_review_required\": false,\n  \"recommendations\": []\n}\n"
+        - id: legal-user
+          role: user
+          text: 'Architect Decision:
+
+            {{#studio_architect.text#}}
+
+
+            If hired, analyze the screenplay for legal concerns.
+
+            '
+        selected: false
+        title: ⚖️ Legal Advisor
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: legal_team
+      position:
+        x: 1026
+        y: 1119
+      positionAbsolute:
+        x: 1026
+        y: 1119
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        selected: false
+        template: '# 🔍 PEER REVIEW AGGREGATION
+
+
+          ## All Agent Reports:
+
+
+          ### Technical Team
+
+          {{ text }}
+
+
+          ### Creative Team
+
+          {{ text_1 }}
+
+
+          ### Stunts Coordinator
+
+          {{ text_2 }}
+
+
+          ### VFX Supervisor
+
+          {{ text_3 }}
+
+
+          ### Legal Advisor
+
+          {{ text_4 }}
+
+
+          ---
+
+          *Ready for cross-validation and conflict detection*
+
+          '
+        title: 📊 Peer Review Aggregator
+        type: template-transform
+        variables:
+        - value_selector:
+          - technical_team
+          - text
+          value_type: string
+          variable: text
+        - value_selector:
+          - creative_team
+          - text
+          value_type: string
+          variable: text_1
+        - value_selector:
+          - stunts_team
+          - text
+          value_type: string
+          variable: text_2
+        - value_selector:
+          - vfx_team
+          - text
+          value_type: string
+          variable: text_3
+        - value_selector:
+          - legal_team
+          - text
+          value_type: string
+          variable: text_4
+        - value_selector:
+          - studio_architect
+          - reasoning_content
+          variable: reasoning_content
+      height: 52
+      id: peer_review_aggregator
+      position:
+        x: 1388
+        y: 801
+      positionAbsolute:
+        x: 1388
+        y: 801
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - peer_review_aggregator
+          - output
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: peer-system
+          role: system
+          text: "You are the Peer Review Coordinator.\n\nYour job:\n1. Cross-check\
+            \ all agent reports for consistency using {{#context#}}\n2. Identify conflicts\
+            \ or contradictions\n3. Validate confidence scores\n4. Flag items needing\
+            \ human review\n\nOutput STRICT JSON:\n{\n  \"conflicts_detected\": [],\n\
+            \  \"consistency_score\": 0,\n  \"validation_status\": \"\",\n  \"cross_validated_findings\"\
+            : {\n    \"technical\": {},\n    \"creative\": {},\n    \"stunts\": {},\n\
+            \    \"vfx\": {},\n    \"legal\": {}\n  },\n  \"escalations\": []\n}\n"
+        - id: peer-user
+          role: user
+          text: 'Review all agent reports for conflicts and consistency.
+
+            '
+        selected: false
+        title: 🔄 Peer Review Loop
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: peer_review_loop
+      position:
+        x: 1750
+        y: 624
+      positionAbsolute:
+        x: 1750
+        y: 624
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1767973078202'
+          - result
+        model:
+          completion_params:
+            frequency_penalty: 0.5
+            presence_penalty: 0.5
+            temperature: 0.2
+            top_p: 0.75
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: budget-system
+          role: system
+          text: "You are the Budget Simulation Agent.\n\nInputs:\n- Peer-reviewed\
+            \ data\n- Structured scene data (JSON)\n- Retrieved {{#context#}} documents\
+            \ containing:\n  - Scene cost scoring rubric\n  - Score-to-dollar band\
+            \ mapping\n\nINSTRUCTIONS:\n1. Do NOT re-interpret the screenplay text.\n\
+            2. Use ONLY the provided scene data.\n3. Use retrieved knowledge to:\n\
+            \   a. Score each scene using the rubric\n   b. Convert scores to dollar\
+            \ bands\n4. Do NOT invent cost rules.\n5. Explain scoring briefly per\
+            \ scene.\n6. Above the line (cast, director, producer)\n7. Below the line\
+            \ (crew, equipment, locations)\n8. Post-production (editing, VFX, sound)\n\
+            9. Contingency (10-15%)\n\n\nOutput STRICT JSON:\n{\n  \"scene_costs\"\
+            : [\n    {\n      \"scene_number\": 1,\n      \"score\": 0,\n      \"\
+            cost_band\": \"$0–$0\",\n      \"drivers\": []\n    }\n  ],\n  \"total_estimated_range\"\
+            : {\n    \"low\": 0,\n    \"high\": 0,\n    \"above_line\": 0,\n    \"\
+            below_line\": 0,\n    \"post_production\": 0,\n  },\n  \"top_cost_drivers\"\
+            : [],\n  \"budget_confidence\": \"0%-0%\",\n}\n"
+        - id: budget-user
+          role: user
+          text: Generate budget estimates based on peer-reviewed findings.
+        selected: false
+        title: 💰 Budget Simulator
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: budget_simulator
+      position:
+        x: 2816
+        y: 705
+      positionAbsolute:
+        x: 2816
+        y: 705
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - peer_review_loop
+          - text
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: continuity-system
+          role: system
+          text: "You are the Continuity & Story Auditor.\n\nUsing data and {{#context#}}\
+            \ Detect:\n- Timeline errors\n- Unresolved setups/payoffs\n- Character\
+            \ arc gaps\n- Tonal inconsistencies\n\nOutput STRICT JSON:\n{\n  \"issues\"\
+            : [],\n  \"severity_scores\": {},\n  \"continuity_confidence\": 0.92,\n\
+            \  \"recommendations\": []\n}\n"
+        - id: continuity-user
+          role: user
+          text: 'Audit continuity based on peer-reviewed findings.
+
+            '
+        selected: false
+        title: 📝 Continuity Auditor
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: continuity_auditor
+      position:
+        x: 2222
+        y: 530
+      positionAbsolute:
+        x: 2222
+        y: 530
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: gatekeeper-system
+          role: system
+          text: "You are THE INTEGRITY GATEKEEPER.\n\nCalculate the CONFIDENCE VECTOR\
+            \ across all dimensions:\n\nOutput STRICT JSON:\n{\n  \"confidence_vector\"\
+            : {\n    \"narrative\": 0.0,\n    \"technical\": 0.0,\n    \"budget\"\
+            : 0.0,\n    \"legal\": 0.0,\n    \"safety\": 0.0,\n    \"overall\": 0.0\n\
+            \  },\n  \"decision\": \"PASS / CONDITIONAL_PASS / FAIL\",\n  \"reason\"\
+            : \"\",\n  \"critical_blockers\": [],\n  \"human_review_required\": true/false\n\
+            }\n"
+        - id: gatekeeper-user
+          role: user
+          text: 'Peer Review Status:
+
+            {{#peer_review_loop.text#}}
+
+
+            Budget Analysis:
+
+            {{#budget_simulator.text#}}
+
+
+            Continuity Audit:
+
+            {{#continuity_auditor.text#}}
+
+
+            Calculate the confidence vector and make a decision.
+
+            '
+        selected: false
+        title: 🛡️ Integrity Gatekeeper
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: integrity_gatekeeper
+      position:
+        x: 3178
+        y: 545
+      positionAbsolute:
+        x: 3178
+        y: 545
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        selected: false
+        template: '# 🎯 EXECUTIVE RISK DASHBOARD
+
+          ## Human Review Required
+
+
+          ---
+
+
+          ## 📊 CONFIDENCE SCORES
+
+          {{text}}
+
+
+          ---
+
+
+          ## 💰 BUDGET SUMMARY
+
+          {{text_1}}
+
+
+          ---
+
+
+          ## 🔍 PEER REVIEW STATUS
+
+          {{text_2}}
+
+
+          ---
+
+
+          ## 📝 CONTINUITY ISSUES
+
+          {{text_3}}
+
+
+          ---
+
+
+          ## ⚠️ CRITICAL DECISION POINTS
+
+
+          ---
+
+          *This dashboard serves as the HUMAN-IN-THE-LOOP checkpoint*
+
+          '
+        title: 🎛️ Risk Dashboard (HITL)
+        type: template-transform
+        variables:
+        - value_selector:
+          - integrity_gatekeeper
+          - text
+          value_type: string
+          variable: text
+        - value_selector:
+          - budget_simulator
+          - text
+          value_type: string
+          variable: text_1
+        - value_selector:
+          - peer_review_loop
+          - text
+          value_type: string
+          variable: text_2
+        - value_selector:
+          - continuity_auditor
+          - text
+          value_type: string
+          variable: text_3
+      height: 52
+      id: risk_dashboard
+      position:
+        x: 3520
+        y: 563
+      positionAbsolute:
+        x: 3520
+        y: 563
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - risk_dashboard
+          - output
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: executive-system
+          role: system
+          text: 'You are the Executive Reporting Agent - TEAM C.
+
+
+            Generate a comprehensive, executive-ready final report and if necessary,
+            use {{#context#}}.
+
+
+            Structure:
+
+
+            ## EXECUTIVE SUMMARY
+
+            - Project name and version
+
+            - Genre and scale
+
+            - One-paragraph overview
+
+
+            ## CONFIDENCE ASSESSMENT
+
+            - Overall confidence score
+
+            - Breakdown by dimension (narrative, technical, budget, legal, safety)
+
+
+            ## BUDGET PROJECTION
+
+            - Total estimated budget
+
+            - Breakdown by category
+
+            - Risk contingency
+
+            - Funding recommendations
+
+
+            ## KEY RISKS & MITIGATION
+
+            - Top 5 risks with severity
+
+            - Proposed mitigation strategies
+
+
+            ## AGENT FINDINGS SUMMARY
+
+            - Technical Team highlights
+
+            - Creative Team highlights
+
+            - Specialized agents (if hired)
+
+
+            ## PEER REVIEW OUTCOMES
+
+            - Validation status
+
+            - Conflicts resolved
+
+            - Outstanding issues
+
+
+            ## GO/NO-GO RECOMMENDATION
+
+            - Clear recommendation with rationale
+
+            - Conditions for greenlight (if conditional)
+
+            - Next steps
+
+
+            Use professional, executive-level language.
+
+            Be data-driven and actionable.
+
+            '
+        - id: executive-user
+          role: user
+          text: 'Based on the complete risk dashboard and all validated findings,
+            generate the final executive report.
+
+            '
+        selected: false
+        title: Executive Report
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: executive_reporting
+      position:
+        x: 3862
+        y: 545
+      positionAbsolute:
+        x: 3862
+        y: 545
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - executive_reporting
+          - text
+          value_type: string
+          variable: final_executive_report
+        - value_selector:
+          - integrity_gatekeeper
+          - text
+          value_type: string
+          variable: confidence_vector
+        - value_selector:
+          - budget_simulator
+          - text
+          value_type: string
+          variable: budget_breakdown
+        - value_selector:
+          - risk_dashboard
+          - output
+          value_type: string
+          variable: risk_dashboard_summary
+        selected: false
+        title: 🏁 End
+        type: end
+      height: 166
+      id: end
+      position:
+        x: 4204
+        y: 506
+      positionAbsolute:
+        x: 4204
+        y: 506
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - story_triage
+          - text
+          value_type: string
+          variable: text
+        selected: false
+        title: Output 2
+        type: end
+      height: 88
+      id: '1767960017402'
+      position:
+        x: 1388
+        y: 0
+      positionAbsolute:
+        x: 1388
+        y: 0
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        is_team_authorization: true
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Upload files for processing
+            ja_JP: Upload files for processing
+            pt_BR: Carregar arquivos para processamento
+            zh_Hans: 上传文件进行处理
+          label:
+            en_US: Files
+            ja_JP: Files
+            pt_BR: Arquivos
+            zh_Hans: 文件
+          llm_description: ''
+          max: null
+          min: null
+          name: files
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: files
+        params:
+          files: ''
+        plugin_id: yevanchen/markitdown
+        plugin_unique_identifier: yevanchen/markitdown:0.0.4@776b3e2e930e2ffd28a75bb20fecbe7a020849cf754f86e604acacf1258877f6
+        provider_icon: /console/api/workspaces/current/plugin/icon?tenant_id=0d1acd5e-bd16-4ea6-98bd-744b5feff0ee&filename=138046ff690576c6f0de16763aa03ba3050f138c06411d016689eba8c7661c51.png
+        provider_id: yevanchen/markitdown/markitdown
+        provider_name: yevanchen/markitdown/markitdown
+        provider_type: builtin
+        selected: false
+        title: MarkItDown
+        tool_configurations: {}
+        tool_description: Python tool for converting files and office documents to
+          Markdown.
+        tool_label: markitdown
+        tool_name: markitdown
+        tool_node_version: '2'
+        tool_parameters:
+          files:
+            type: variable
+            value:
+            - start
+            - screenplay
+        type: tool
+      height: 52
+      id: '1767960093838'
+      position:
+        x: 342
+        y: 315
+      positionAbsolute:
+        x: 342
+        y: 315
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - peer_review_aggregator
+          - output
+          value_type: string
+          variable: output
+        selected: false
+        title: Output 3
+        type: end
+      height: 88
+      id: '1767960664055'
+      position:
+        x: 1750
+        y: 792
+      positionAbsolute:
+        x: 1750
+        y: 792
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - studio_architect
+          - text
+          value_type: string
+          variable: text
+        selected: false
+        title: Output 4
+        type: end
+      height: 88
+      id: '1767961107938'
+      position:
+        x: 1026
+        y: 1287
+      positionAbsolute:
+        x: 1026
+        y: 1287
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs: []
+        selected: false
+        title: Output 5
+        type: end
+      height: 52
+      id: '1767968096011'
+      position:
+        x: 3178
+        y: 738
+      positionAbsolute:
+        x: 3178
+        y: 738
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids:
+        - U/Fuvh00Y/zfNzo9VdPwilYeD5ee/GFbW8gzFdbRYckYaE24So1ElQxmtkHJSMGt
+        multiple_retrieval_config:
+          reranking_enable: false
+          reranking_mode: weighted_score
+          top_k: 4
+          weights:
+            keyword_setting:
+              keyword_weight: 0
+            vector_setting:
+              embedding_model_name: text-embedding-3-large
+              embedding_provider_name: langgenius/openai/openai
+              vector_weight: 1
+            weight_type: customized
+        query_attachment_selector: []
+        query_variable_selector:
+        - '1767984099372'
+        - text
+        retrieval_mode: multiple
+        selected: false
+        title: Knowledge Retrieval 2
+        type: knowledge-retrieval
+      height: 90
+      id: '1767973078202'
+      position:
+        x: 2454
+        y: 719
+      positionAbsolute:
+        x: 2454
+        y: 719
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4
+          provider: langgenius/openai/openai
+        prompt_template:
+        - role: system
+          text: Based on these Peer Review reports (Technical, VFX, Stunts), generate
+            3-5 specific search queries to find the exact line-item costs in our internal
+            database.
+        selected: false
+        title: Query Generator
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '1767984099372'
+      position:
+        x: 2112
+        y: 720
+      positionAbsolute:
+        x: 2112
+        y: 720
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        author: zoltan
+        desc: ''
+        height: 88
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Versioning
+          helps with re-ingestion of the document.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 240
+      height: 88
+      id: '1768029066670'
+      position:
+        x: -603.3445439701909
+        y: 717.0712366251197
+      positionAbsolute:
+        x: -603.3445439701909
+        y: 717.0712366251197
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 240
+    - data:
+        author: zoltan
+        desc: ''
+        height: 88
+        selected: false
+        showAuthor: true
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Once
+          decomposed, would be good to feed it back to the system to re-revision the
+          knowledge stored (if at all stored). Currently this path doesn''t exist.
+          The document isn''t fed into the the RAG.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+        theme: blue
+        title: ''
+        type: ''
+        width: 240
+      height: 88
+      id: '1768029220556'
+      position:
+        x: -0.9333221476497329
+        y: 278.0712366251197
+      positionAbsolute:
+        x: -0.9333221476497329
+        y: 278.0712366251197
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-note
+      width: 240
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - story_triage
+          - text
+        model:
+          completion_params:
+            frequency_penalty: 0.5
+            presence_penalty: 0.5
+            temperature: 0.2
+            top_p: 0.75
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: executive-system
+          role: system
+          text: 'You are a professional film and television development analyst writing
+            for producers, financiers, and creative executives.
+
+
+            Your task is to transform structured screenplay analysis data into a polished,
+            reader-friendly written report. The report must follow the exact section
+            structure below and use professional industry language.
+
+
+            Do NOT output JSON.
+
+            Do NOT repeat field names verbatim.
+
+            Do NOT invent details that are not present in the input.
+
+
+            Use complete sentences and paragraphs. Bullet points are allowed only
+            where explicitly indicated.
+
+
+            ========================
+
+            REPORT STRUCTURE
+
+            ========================
+
+
+            ## SUMMARY REPORT
+
+            Briefly identify the genre and overall tone of the screenplay, followed
+            by a one-paragraph high-level overview of the story world, thematic focus,
+            and historical context.
+
+
+            ## GENRE & TONE
+
+            Summarize the genre classification and tonal qualities, explaining how
+            they shape audience expectations and viewing experience.
+
+
+            ## PRODUCTION SCALE
+
+            Describe the estimated production scale, including period requirements,
+            location complexity, and any factors influencing budget or logistics.
+
+
+            ## RISK & SENSITIVITY CONSIDERATIONS
+
+            Discuss relevant risk domains such as historical accuracy, cultural representation,
+            and ethical considerations. Emphasize areas that may require additional
+            research, consultation, or care during production.
+
+
+            ## LOCATIONS & SETTING
+
+            Describe the primary locations featured in the screenplay and explain
+            their narrative or symbolic significance within the story.
+
+
+            ## CHARACTER OVERVIEW
+
+            Summarize the principal characters and their social dynamics. Highlight
+            family relationships, power structures, and cultural context without listing
+            every
+
+            character exhaustively.
+
+
+            ## UNIQUE PROPS OR ELEMENTS
+
+            Describe story-critical objects, tools, or material elements features
+            in the screenplay and explain their narrative or symbolic significance
+            within the story.
+
+
+            ## TECHNICAL & EFFECTS NOTES
+
+            Provide an overview of special effects or practical production requirements,
+            with attention to realism and historical authenticity.
+
+
+            ## CONCLUDING OBSERVATIONS
+
+            Conclude with a short evaluative paragraph addressing what distinguishes
+            this screenplay creatively or thematically and why it may be compelling
+            from a
+
+            development perspective.
+
+
+            ========================
+
+            STYLE GUIDELINES
+
+            ========================
+
+
+            - Write in clear, confident, professional prose
+
+            - Avoid redundancy between sections
+
+            - Integrate all relevant input fields naturally
+
+            - Maintain a neutral, analytical tone suitable for development coverage
+
+            - If information is limited, acknowledge it without speculation'
+        - id: executive-user
+          role: user
+          text: 'Using the following structured screenplay analysis, write a comprehensive
+
+            development report.
+
+
+            The report should include:
+
+            - An opening overview of genre, tone, and thematic focus
+
+            - A discussion of production scale and practical considerations
+
+            - An assessment of potential risk domains and sensitivities
+
+            - A description of key locations and their narrative importance
+
+            - A summary of the primary characters and social dynamics
+
+            - Notes on special effects and technical requirements
+
+            - A concluding paragraph highlighting the screenplay’s unique qualities
+
+
+            Structured Analysis Input:
+
+            {{#context#}}'
+        selected: true
+        title: Initial Analysis Report
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '17680297708350'
+      position:
+        x: 1026
+        y: 0
+      positionAbsolute:
+        x: 1026
+        y: 0
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - story_triage
+          - text
+        model:
+          completion_params:
+            frequency_penalty: 0.5
+            json_schema: "{\n  \"name\": \"studio_architecture_plan\",\n  \"schema\"\
+              : {\n    \"type\": \"object\",\n    \"additionalProperties\": false,\n\
+              \    \"required\": [\n      \"roles\",\n      \"global_rules\"\n   \
+              \ ],\n    \"properties\": {\n      \"roles\": {\n        \"type\": \"\
+              array\",\n        \"minItems\": 1,\n        \"description\": \"Dynamically\
+              \ defined execution roles derived from the screenplay analysis\",\n\
+              \        \"items\": {\n          \"type\": \"object\",\n          \"\
+              additionalProperties\": false,\n          \"required\": [\n        \
+              \    \"role_id\",\n            \"persona\",\n            \"task\",\n\
+              \            \"priority\",\n            \"context_inputs\",\n      \
+              \      \"output_spec\"\n          ],\n          \"properties\": {\n\
+              \            \"role_id\": {\n              \"type\": \"string\",\n \
+              \             \"description\": \"Stable identifier used for routing\
+              \ and storage\"\n            },\n            \"persona\": {\n      \
+              \        \"type\": \"string\",\n              \"description\": \"Comprehensive\
+              \ system prompt (>200 words) defining the agent's tone, deep domain\
+              \ expertise, and specific step-by-step analytical methodology.\"\n}\"\
+              \n            },\n            \"task\": {\n              \"type\": \"\
+              string\",\n              \"description\": \"Specific analytical task\
+              \ this role must perform\"\n            },\n            \"priority\"\
+              : {\n              \"type\": \"string\",\n              \"enum\": [\"\
+              critical\", \"high\", \"medium\", \"low\"]\n            },\n       \
+              \     \"context_inputs\": {\n              \"type\": \"array\",\n  \
+              \            \"description\": \"Named context variables passed into\
+              \ the agent\",\n              \"items\": {\n                \"type\"\
+              : \"string\"\n              }\n            },\n            \"output_spec\"\
+              : {\n              \"type\": \"object\",\n              \"additionalProperties\"\
+              : false,\n              \"required\": [\n                \"format\"\
+              ,\n                \"sections\"\n              ],\n              \"\
+              properties\": {\n                \"format\": {\n                  \"\
+              type\": \"string\",\n                  \"enum\": [\"narrative_report\"\
+              , \"checklist\", \"risk_assessment\"]\n                },\n        \
+              \        \"sections\": {\n                  \"type\": \"array\",\n \
+              \                 \"items\": { \"type\": \"string\" }\n            \
+              \    }\n              }\n            }\n          }\n        }\n   \
+              \   },\n      \"global_rules\": {\n        \"type\": \"object\",\n \
+              \       \"additionalProperties\": false,\n        \"required\": [\n\
+              \          \"peer_review_required\",\n          \"escalation_triggers\"\
+              \n        ],\n        \"properties\": {\n          \"peer_review_required\"\
+              : {\n            \"type\": \"boolean\"\n          },\n          \"escalation_triggers\"\
+              : {\n            \"type\": \"array\",\n            \"description\":\
+              \ \"Conditions that require mandatory human intervention\",\n      \
+              \      \"items\": { \"type\": \"string\" }\n          }\n        }\n\
+              \      }\n    }\n  }\n}"
+            presence_penalty: 0.5
+            response_format: json_schema
+            temperature: 0.2
+            top_p: 0.75
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: architect-system
+          role: system
+          text: "You are THE STUDIO ARCHITECT.\n\nYour role is to design the execution\
+            \ team required to responsibly evaluate,develop, and prepare a screenplay\
+            \ for production, based on a structured analysis provided to you.\n\n\
+            You act as a senior studio hiring authority and systems designer.\n\n\
+            ========================\nYOUR RESPONSIBILITIES\n========================\n\
+            \nBased solely on the provided analysis, you must:\n\n1. Determine what\
+            \ specialized agents or roles are required\n2. Define each agent’s purpose,\
+            \ scope of responsibility, and priority\n3. Identify areas of risk, complexity,\
+            \ or sensitivity that justify each role\n\nYou are NOT constrained to\
+            \ a predefined list of agents.\nYou may invent agent roles as needed,\
+            \ provided they are justified by the analysis.\n\n========================\n\
+            DECISION PRINCIPLES\n========================\n\n- Hire the BEST viable\
+            \ team necessary to address all identified risks\n- PERSONA DEPTH: Each\
+            \ generated 'persona' must be a standalone, high-fidelity system prompt.\
+            \ \n- It must exceed 200 words and include specific instructions on professional\
+            \ tone, \n  domain expertise, and the exact analytical methodology the\
+            \ agent should use.\n- Introduce additional agents only when necessary,\
+            \ complexity, ethics, safety, execution or scale demand it\n- Treat historical\
+            \ accuracy, cultural representation, and animal-related material as  high-scrutiny\
+            \ domains\n- Assume downstream agents will operate autonomously within\
+            \ their defined scopes\n- Do not invent story elements, locations, or\
+            \ requirements not present in the analysis\n\n========================\n\
+            OUTPUT REQUIREMENTS\n========================\n\nYou MUST output valid\
+            \ JSON only.\nNo markdown. No commentary. No explanatory text outside\
+            \ the JSON.\n\nThe output must:\n- Be safe to pass directly into downstream\
+            \ agents and automated workflows\n- Contain only agents you have explicitly\
+            \ decided to hire\n- Clearly explain why each agent exists and what they\
+            \ are responsible for"
+        - id: architect-user
+          role: user
+          text: 'Using the following structured screenplay analysis, design the execution
+            team required to responsibly assess and produce the project.
+
+
+            Structured Analysis Input:
+
+            {{#context#}}'
+        selected: false
+        structured_output:
+          schema:
+            properties:
+              name:
+                type: string
+              schema:
+                properties:
+                  global_rules:
+                    properties:
+                      escalation_triggers:
+                        items:
+                          type: string
+                        type: array
+                      peer_review_required:
+                        type: boolean
+                    required:
+                    - peer_review_required
+                    - escalation_triggers
+                    type: object
+                  roles:
+                    items:
+                      properties:
+                        context_inputs:
+                          items: {}
+                          type: array
+                        output_spec:
+                          properties:
+                            format:
+                              enum:
+                              - narrative_report
+                              - checklist
+                              - risk_assessment
+                              type: string
+                            sections:
+                              items:
+                                type: string
+                              type: array
+                          required:
+                          - format
+                          - sections
+                          type: object
+                        persona:
+                          type: string
+                        priority:
+                          enum:
+                          - critical
+                          - high
+                          - medium
+                          - low
+                          type: string
+                        role_id:
+                          type: string
+                        task:
+                          type: string
+                      required:
+                      - role_id
+                      - persona
+                      - task
+                      - priority
+                      - context_inputs
+                      - output_spec
+                      type: object
+                    minItems: 1
+                    type: array
+                required:
+                - roles
+                - global_rules
+                type: object
+            required:
+            - name
+            - schema
+            type: object
+        structured_output_enabled: true
+        title: Dynamic Agent Architect
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '17680335917610'
+      position:
+        x: 1026
+        y: 312
+      positionAbsolute:
+        x: 1026
+        y: 312
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        error_handle_mode: terminated
+        flatten_output: false
+        height: 376
+        is_parallel: false
+        iterator_input_type: object
+        iterator_selector:
+        - '17680335917610'
+        - structured_output
+        - schema
+        - roles
+        output_selector:
+        - '1768046041551'
+        - text
+        output_type: array[string]
+        parallel_nums: 10
+        selected: false
+        start_node_id: 1768045656157start
+        title: Iteration
+        type: iteration
+        width: 506
+      height: 376
+      id: '1768045656157'
+      position:
+        x: 1388
+        y: 168
+      positionAbsolute:
+        x: 1388
+        y: 168
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 506
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1768045656157start
+      parentId: '1768045656157'
+      position:
+        x: 60
+        y: 88
+      positionAbsolute:
+        x: 1448
+        y: 256
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - story_triage
+          - text
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1768045656157'
+        model:
+          completion_params:
+            json_schema: "{\n  \"name\": \"agent_execution_result\",\n  \"schema\"\
+              : {\n    \"type\": \"object\",\n    \"additionalProperties\": false,\n\
+              \    \"required\": [\"role_id\", \"metadata\", \"report_content\", \"\
+              risk_flags\"],\n    \"properties\": {\n      \"role_id\": { \"type\"\
+              : \"string\", \"description\": \"Must match the role_id assigned by\
+              \ the Architect\" },\n      \"metadata\": {\n        \"type\": \"object\"\
+              ,\n        \"properties\": {\n          \"timestamp\": { \"type\": \"\
+              string\" },\n          \"tokens_used\": { \"type\": \"integer\" }\n\
+              \        }\n      },\n      \"report_content\": {\n        \"type\"\
+              : \"object\",\n        \"description\": \"Key-value pairs where keys\
+              \ are the 'sections' requested by the Architect\",\n        \"additionalProperties\"\
+              : { \"type\": \"string\" }\n      },\n      \"risk_flags\": {\n    \
+              \    \"type\": \"array\",\n        \"items\": {\n          \"type\"\
+              : \"object\",\n          \"properties\": {\n            \"issue\": {\
+              \ \"type\": \"string\" },\n            \"severity\": { \"type\": \"\
+              string\", \"enum\": [\"low\", \"medium\", \"high\", \"critical\"] },\n\
+              \            \"mitigation_suggestion\": { \"type\": \"string\" }\n \
+              \         }\n        }\n      }\n    }\n  }\n}"
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: aaa0a6da-202f-4c95-9819-a6ccb3de7399
+          role: system
+          text: '{{persona}}
+
+
+            ========================
+
+            YOUR SPECIFIC TASK
+
+            ========================
+
+            {{task}}
+
+
+            ========================
+
+            CONTEXT & INPUTS
+
+            ========================
+
+            You are working with the following data:
+
+            - Screenplay Analysis: {{#context#}}
+
+            - Screenplay Text: {{#1767960093838.text#}}
+
+
+            ========================
+
+            OUTPUT REQUIREMENTS
+
+            ========================
+
+            - DO NOT hallucinate details outside the provided script.
+
+            - Maintain the professional tone of your assigned persona.
+
+            - Focus strictly on your domain of expertise.'
+        selected: false
+        structured_output_enabled: false
+        title: LLM 16
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '1768046041551'
+      parentId: '1768045656157'
+      position:
+        x: 204
+        y: 60
+      positionAbsolute:
+        x: 1592
+        y: 228
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1768045656157'
+        output_type: number
+        selected: false
+        title: Variable Aggregator
+        type: variable-aggregator
+        variables:
+        - - '1768045656157'
+          - index
+      height: 108
+      id: '1768071367930'
+      parentId: '1768045656157'
+      position:
+        x: 204
+        y: 208
+      positionAbsolute:
+        x: 1592
+        y: 376
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 1002
+    - data:
+        outputs:
+        - value_selector:
+          - '17680745966700'
+          - text
+          value_type: string
+          variable: output
+        selected: false
+        title: Output 6
+        type: end
+      height: 88
+      id: '1768074108441'
+      position:
+        x: 2336
+        y: 312
+      positionAbsolute:
+        x: 2336
+        y: 312
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1768045656157'
+          - output
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: executive-system
+          role: system
+          text: 'You are the Lead Producer. Your job is to take {{#context#}} of specialist
+            agent reports and synthesize them into a "Greenlight Dossier."
+
+
+            Formatting Rules:
+
+            Use a clear hierarchy with Headings and Horizontal Rules.
+
+            Create a Risk Matrix table at the top to summarize all risks
+
+
+            Use Callout Blocks (>) for critical priority items.
+
+            Use Headings (#) where appropriate.'
+        selected: false
+        title: Executive Report (1)
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '17680745966700'
+      position:
+        x: 1994
+        y: 312
+      positionAbsolute:
+        x: 1994
+        y: 312
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: -60.43884716730463
+      y: 362.2952457888589
+      zoom: 0.5103032825858016
+  rag_pipeline_variables: []
