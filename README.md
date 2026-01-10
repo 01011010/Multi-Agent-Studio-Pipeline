@@ -1,11 +1,11 @@
 # Workflow-Multi-Agent-Studio-Pipeline
 End-to-end screenplay ingestion with RAG, dynamic agent hiring, peer review loops, and executive decision workflow.
 
-**Note: This workflow is currently in active development. While it functions more as an experimental playground at this stage, it can process a screenplay.pdf to generate the following report:
+**Note:** This workflow is currently in active development. While it functions more as an experimental playground at this stage, it can process a screenplay.pdf to generate the following report:
 
-**Dynamic Agent Orchestration (WIP): I am currently developing a dynamic persona injection section to move away from fixed, hand-coded agents. The goal is to implement an Architect Agent that scans the input document and dynamically generates a specialized team based on internal blueprints. This section is currently standalone and can be wired into the primary workflow (run parallel, or replaced completely).
+**Dynamic Agent Orchestration (WIP):** I am currently developing a dynamic persona injection section to move away from fixed, hand-coded agents. The goal is to implement an Architect Agent that scans the input document and dynamically generates a specialized team based on internal blueprints. This section is currently standalone and can be wired into the primary workflow (run parallel, or replaced completely).
 
-**Usage Note: This workflow has not yet been stress-tested with large-scale documents. To avoid token limits or memory constraints, I recommend implementing a chunking strategy before processing significant files.
+**Usage Note:** This workflow has not yet been stress-tested with large-scale documents. To avoid token limits or memory constraints, I recommend implementing a chunking strategy before processing significant files.
 
 # EXECUTIVE REPORT SAMPLE
 
