@@ -132,6 +132,7 @@ workflow:
         sourceType: llm
         targetType: template-transform
       id: technical_team-peer_review_agg
+      selected: false
       source: technical_team
       sourceHandle: source
       target: peer_review_aggregator
@@ -143,6 +144,7 @@ workflow:
         sourceType: llm
         targetType: template-transform
       id: creative_team-peer_review_agg
+      selected: false
       source: creative_team
       sourceHandle: source
       target: peer_review_aggregator
@@ -154,6 +156,7 @@ workflow:
         sourceType: llm
         targetType: template-transform
       id: stunts_team-peer_review_agg
+      selected: false
       source: stunts_team
       sourceHandle: source
       target: peer_review_aggregator
@@ -165,6 +168,7 @@ workflow:
         sourceType: llm
         targetType: template-transform
       id: vfx_team-peer_review_agg
+      selected: false
       source: vfx_team
       sourceHandle: source
       target: peer_review_aggregator
@@ -176,6 +180,7 @@ workflow:
         sourceType: llm
         targetType: template-transform
       id: legal_team-peer_review_agg
+      selected: false
       source: legal_team
       sourceHandle: source
       target: peer_review_aggregator
@@ -418,6 +423,7 @@ workflow:
         sourceType: iteration-start
         targetType: variable-aggregator
       id: 1768045656157start-source-1768071367930-target
+      selected: false
       source: 1768045656157start
       sourceHandle: source
       target: '1768071367930'
@@ -429,6 +435,7 @@ workflow:
         sourceType: iteration
         targetType: llm
       id: 1768045656157-source-17680745966700-target
+      selected: false
       source: '1768045656157'
       sourceHandle: source
       target: '17680745966700'
@@ -440,6 +447,7 @@ workflow:
         sourceType: llm
         targetType: end
       id: 17680745966700-source-1768074108441-target
+      selected: false
       source: '17680745966700'
       sourceHandle: source
       target: '1768074108441'
@@ -450,10 +458,54 @@ workflow:
         isInLoop: false
         sourceType: llm
         targetType: llm
-      id: story_triage-source-studio_architect-target
+      id: studio_architect-source-17680771324070-target
+      source: studio_architect
+      sourceHandle: source
+      target: '17680771324070'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: 17680771324070-source-peer_review_aggregator-target
+      source: '17680771324070'
+      sourceHandle: source
+      target: peer_review_aggregator
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: story_triage-source-17680335917610-target
       source: story_triage
       sourceHandle: source
-      target: studio_architect
+      target: '17680335917610'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: llm
+      id: 17680335917610-source-1768116034235-target
+      source: '17680335917610'
+      sourceHandle: source
+      target: '1768116034235'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1768116034235-source-1768116437210-target
+      source: '1768116034235'
+      sourceHandle: source
+      target: '1768116437210'
       targetHandle: target
       type: custom
       zIndex: 0
@@ -490,11 +542,11 @@ workflow:
       height: 135
       id: start
       position:
-        x: 0
-        y: 273
+        x: 244
+        y: 476
       positionAbsolute:
-        x: 0
-        y: 273
+        x: 244
+        y: 476
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -612,12 +664,12 @@ workflow:
       height: 88
       id: story_triage
       position:
-        x: 664
-        y: 315
+        x: 928
+        y: 500
       positionAbsolute:
-        x: 664
-        y: 315
-      selected: true
+        x: 928
+        y: 500
+      selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
@@ -784,11 +836,11 @@ workflow:
       height: 88
       id: studio_architect
       position:
-        x: 664
-        y: 789
+        x: 1290
+        y: 515
       positionAbsolute:
-        x: 664
-        y: 789
+        x: 1290
+        y: 515
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -798,10 +850,14 @@ workflow:
         context:
           enabled: true
           variable_selector:
-          - knowledge_ingestion
-          - result
+          - story_triage
+          - text
         model:
           completion_params:
+            json_schema: "{\n  \"agent_id\": \"technical_systems\",\n  \"location_count\"\
+              : 0,\n  \"logistical_complexity\": \"string (High/Med/Low)\",\n  \"\
+              departmental_impacts\": { \"lighting\": \"string\", \"transport\": \"\
+              string\" },\n  \"estimated_production_weeks\": 0\n}"
             temperature: 0.5
           mode: chat
           name: gpt-4o-mini
@@ -809,34 +865,34 @@ workflow:
         prompt_template:
         - id: tech-system
           role: system
-          text: "You are the Technical Systems Agent.\n\nUsing {{#context#}} analyze:\
-            \ feasibility, budget impact, safety, schedule, legal exposure.\n\nDo\
-            \ NOT comment on story or characters.\n\nSample Output STRICT JSON:\n\
-            {\n  \"agent_id\": \"technical\",\n  \"issues\": [],\n  \"recommendations\"\
-            : [],\n  \"technical_confidence\": 0,\n  \"estimated_days\": 0\n}\n"
+          text: 'You are the Technical Systems Agent.
+
+
+            Using {{#context#}} and {{#1767960093838.text#}} analyze: feasibility,
+            budget impact, safety, schedule, legal exposure. Scan for every change
+            of location and every ''Time of Day'' tag. Evaluate the impact of night
+            shoots on the crew schedule.
+
+
+            Do NOT comment on story or characters.'
         - id: tech-user
           role: user
           text: 'Scope from Architect:
 
-            {{#studio_architect.text#}}
-
-
-            Analyze the screenplay from the knowledge base.
-
-            '
+            {{#studio_architect.text#}}'
         selected: false
-        title: 🔧 Technical Team
+        title: 🔧 Technical Agent
         type: llm
         vision:
           enabled: false
       height: 88
       id: technical_team
       position:
-        x: 1026
-        y: 447
+        x: 1652
+        y: 168
       positionAbsolute:
-        x: 1026
-        y: 447
+        x: 1652
+        y: 168
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -846,10 +902,13 @@ workflow:
         context:
           enabled: true
           variable_selector:
-          - knowledge_ingestion
-          - result
+          - story_triage
+          - text
         model:
           completion_params:
+            json_schema: "{\n  \"agent_id\": \"creative_content\",\n  \"narrative_integrity_score\"\
+              : 0,\n  \"tone_consistency\": \"string\",\n  \"character_arcs\": [{\
+              \ \"name\": \"string\", \"conflict_resolution\": \"boolean\" }]\n}"
             temperature: 0.5
           mode: chat
           name: gpt-4o-mini
@@ -857,29 +916,34 @@ workflow:
         prompt_template:
         - id: creative-system
           role: system
-          text: "You are the Creative Systems Agent.\n\nUsing {{#context#}} analyze:\
-            \ narrative coherence, tone, world-building, character logic.\n\nDo NOT\
-            \ estimate budget or feasibility.\n\nSample Output STRICT JSON:\n{\n \
-            \ \"agent_id\": \"creative\",\n  \"issues\": [],\n  \"strengths\": [],\n\
-            \  \"creative_confidence\": 0\n}\n"
-        - id: creative-user
-          role: user
-          text: 'Analyze the screenplay from the knowledge base for creative elements.
+          text: 'You are the Creative Content Systems Agent.
 
-            '
+
+            Using {{#context#}} and {{#1767960093838.text#}} analyze: narrative coherence,
+            tone, world-building, character logic. Identify ''Leaps of Logic'', scenes
+            where a character knows something they shouldn''t, or moves between locations
+            too fast.
+
+
+            Do NOT estimate budget or feasibility.'
+        - id: f98d4f72-6248-4599-bf73-1e70fd519347
+          role: user
+          text: 'Scope from Architect:
+
+            {{#studio_architect.text#}}'
         selected: false
-        title: 🎭 Creative Team
+        title: 🎭 Content Agent
         type: llm
         vision:
           enabled: false
       height: 88
       id: creative_team
       position:
-        x: 1026
-        y: 615
+        x: 1652
+        y: 336
       positionAbsolute:
-        x: 1026
-        y: 615
+        x: 1652
+        y: 336
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -889,10 +953,14 @@ workflow:
         context:
           enabled: true
           variable_selector:
-          - knowledge_ingestion
-          - result
+          - story_triage
+          - text
         model:
           completion_params:
+            json_schema: "{\n  \"agent_id\": \"stunt_coordinator\",\n  \"stunt_list\"\
+              : [{ \"scene\": 0, \"type\": \"string\", \"risk_rating\": 10 }],\n \
+              \ \"mandatory_personnel\": [\"string\"],\n  \"insurance_red_flags\"\
+              : [\"string\"]\n}"
             temperature: 0.5
           mode: chat
           name: gpt-4o-mini
@@ -900,36 +968,39 @@ workflow:
         prompt_template:
         - id: stunts-system
           role: system
-          text: "You are the Stunts Coordinator.\n\nIF hired by the Studio Architect\
-            \ use {{#context#}}:\n- Identify all stunt sequences\n- Assess safety\
-            \ risks (1-10 scale)\n- Estimate stunt team size and equipment\n- Flag\
-            \ insurance concerns\n\nIF NOT hired:\n- Output: {\"agent_id\": \"stunts\"\
-            , \"hired\": false}\n\nOutput STRICT JSON:\n{\n  \"agent_id\": \"stunts\"\
-            ,\n  \"hired\": true/false,\n  \"stunt_sequences\": [],\n  \"safety_risk_score\"\
-            : 0,\n  \"team_size_needed\": 0,\n  \"insurance_flags\": []\n}\n"
+          text: 'You are the Stunts Coordinator.
+
+            Using {{#context#}} and {{#1767960093838.text#}} analyze and distinguish
+            between ''High Fall,'' ''Combat,'' and ''Vehicle'' stunts. Note if any
+            actors are specifically named in stunt beats.
+
+            - Identify all stunt sequences
+
+            - Assess safety risks (1-10 scale)
+
+            - Estimate stunt team size and equipment
+
+            - Flag insurance concerns'
         - id: stunts-user
           role: user
-          text: 'Architect Decision:
+          text: 'Scope from Architect:
 
             {{#studio_architect.text#}}
 
-
-            If hired, analyze the screenplay for stunt requirements.
-
             '
         selected: false
-        title: 🤸 Stunts Coordinator
+        title: 🤸 Safety & Stunt Agent
         type: llm
         vision:
           enabled: false
       height: 88
       id: stunts_team
       position:
-        x: 1026
-        y: 783
+        x: 1652
+        y: 504
       positionAbsolute:
-        x: 1026
-        y: 783
+        x: 1652
+        y: 504
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -939,10 +1010,13 @@ workflow:
         context:
           enabled: true
           variable_selector:
-          - knowledge_ingestion
-          - result
+          - story_triage
+          - text
         model:
           completion_params:
+            json_schema: "{\n  \"agent_id\": \"vfx_supervisor\",\n  \"estimated_shot_count\"\
+              : 0,\n  \"complexity_breakdown\": { \"simple\": 0, \"complex\": 0, \"\
+              impossible\": 0 },\n  \"pre_vis_priority_scenes\": [0]\n}"
             temperature: 0.5
           mode: chat
           name: gpt-4o-mini
@@ -950,36 +1024,32 @@ workflow:
         prompt_template:
         - id: vfx-system
           role: system
-          text: "You are the VFX Supervisor.\n\nIF hired by the Studio Architect use\
-            \ {{#context#}}:\n- Identify all VFX shots\n- Categorize complexity (simple,\
-            \ medium, complex, impossible)\n- Estimate VFX vendor needs\n- Flag pre-vis\
-            \ requirements\n\nIF NOT hired:\n- Output: {\"agent_id\": \"vfx\", \"\
-            hired\": false}\n\nOutput STRICT JSON:\n{\n  \"agent_id\": \"vfx\",\n\
-            \  \"hired\": true/false,\n  \"vfx_shots\": [],\n  \"complexity_breakdown\"\
-            : {},\n  \"vendor_requirements\": [],\n  \"pre_vis_needed\": false\n}\n"
+          text: "You are the VFX Supervisor.\n\nUsing {{#context#}} and {{#1767960093838.text#}}\
+            \ analyze and \ndistinguish between 'Set Extensions' (backgrounds) and\
+            \ 'Character VFX' (monsters/powers). Note where 'Practical' elements are\
+            \ needed to sell the VFX.\n\n- Identify all VFX shots\n- Categorize complexity\
+            \ (simple, medium, complex, impossible)\n- Estimate VFX vendor needs\n\
+            - Flag pre-vis requirements"
         - id: vfx-user
           role: user
           text: 'Architect Decision:
 
             {{#studio_architect.text#}}
 
-
-            If hired, analyze the screenplay for VFX requirements.
-
-            '
+            Analyze the screenplay for VFX requirements.'
         selected: false
-        title: 🎬 VFX Supervisor
+        title: 🎬 VFX Agent
         type: llm
         vision:
           enabled: false
       height: 88
       id: vfx_team
       position:
-        x: 1026
-        y: 951
+        x: 1652
+        y: 672
       positionAbsolute:
-        x: 1026
-        y: 951
+        x: 1652
+        y: 672
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -993,6 +1063,9 @@ workflow:
           - result
         model:
           completion_params:
+            json_schema: "{\n  \"agent_id\": \"legal_advisor\",\n  \"clearance_items\"\
+              : [{ \"type\": \"brand/person/music\", \"item\": \"string\", \"risk\"\
+              : \"string\" }],\n  \"permit_requirements\": [\"string\"]\n}"
             temperature: 0.5
           mode: chat
           name: gpt-4o-mini
@@ -1000,13 +1073,22 @@ workflow:
         prompt_template:
         - id: legal-system
           role: system
-          text: "You are the Legal Advisor.\n\nIF hired by the Studio Architect use{{#context#}}:\n\
-            - Identify real people, brands, trademarks\n- Flag music/IP clearance\
-            \ needs\n- Assess defamation/libel risks\n- Note location/permit concerns\n\
-            \nIF NOT hired:\n- Output: {\"agent_id\": \"legal\", \"hired\": false}\n\
-            \nOutput STRICT JSON:\n{\n  \"agent_id\": \"legal\",\n  \"hired\": true/false,\n\
-            \  \"clearance_items\": [],\n  \"risk_level\": \"low/medium/high\",\n\
-            \  \"legal_review_required\": false,\n  \"recommendations\": []\n}\n"
+          text: 'You are the Legal Advisor.
+
+
+            Using {{#context#}} and {{#1767960093838.text#}} analyze and
+
+            flag any ''Likeness'' issues. If a character looks or sounds like a real
+            living celebrity, flag it as a high-defamation risk.
+
+
+            - Identify real people, brands, trademarks
+
+            - Flag music/IP clearance needs
+
+            - Assess defamation/libel risks
+
+            - Note location/permit concerns'
         - id: legal-user
           role: user
           text: 'Architect Decision:
@@ -1014,22 +1096,22 @@ workflow:
             {{#studio_architect.text#}}
 
 
-            If hired, analyze the screenplay for legal concerns.
+            Analyze the screenplay for legal concerns.
 
             '
         selected: false
-        title: ⚖️ Legal Advisor
+        title: ⚖️ Compliance Agent
         type: llm
         vision:
           enabled: false
       height: 88
       id: legal_team
       position:
-        x: 1026
-        y: 1119
+        x: 1652
+        y: 840
       positionAbsolute:
-        x: 1026
-        y: 1119
+        x: 1652
+        y: 840
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1037,36 +1119,40 @@ workflow:
       width: 242
     - data:
         selected: false
-        template: '# 🔍 PEER REVIEW AGGREGATION
+        template: '# PEER REVIEW AGGREGATION
 
 
           ## All Agent Reports:
 
 
-          ### Technical Team
+          ### Technical Agent
 
           {{ text }}
 
 
-          ### Creative Team
+          ### Content Agent
 
           {{ text_1 }}
 
 
-          ### Stunts Coordinator
+          ### Stunts Agent
 
           {{ text_2 }}
 
 
-          ### VFX Supervisor
+          ### VFX Agent
 
           {{ text_3 }}
 
 
-          ### Legal Advisor
+          ### Compliance Agent
 
           {{ text_4 }}
 
+
+          ### Continuity Anget
+
+          {{ text_5 }}
 
           ---
 
@@ -1105,14 +1191,19 @@ workflow:
           - studio_architect
           - reasoning_content
           variable: reasoning_content
+        - value_selector:
+          - '17680771324070'
+          - text
+          value_type: string
+          variable: text_5
       height: 52
       id: peer_review_aggregator
       position:
-        x: 1388
-        y: 801
+        x: 2014
+        y: 526
       positionAbsolute:
-        x: 1388
-        y: 801
+        x: 2014
+        y: 526
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1126,6 +1217,11 @@ workflow:
           - output
         model:
           completion_params:
+            json_schema: "{\n  \"conflicts_detected\": [],\n  \"consistency_score\"\
+              : 0,\n  \"validation_status\": \"\",\n  \"cross_validated_findings\"\
+              : {\n    \"technical\": {},\n    \"creative\": {},\n    \"stunts\":\
+              \ {},\n    \"vfx\": {},\n    \"legal\": {}\n  },\n  \"escalations\"\
+              : []\n}"
             temperature: 0.5
           mode: chat
           name: gpt-4o-mini
@@ -1133,18 +1229,21 @@ workflow:
         prompt_template:
         - id: peer-system
           role: system
-          text: "You are the Peer Review Coordinator.\n\nYour job:\n1. Cross-check\
-            \ all agent reports for consistency using {{#context#}}\n2. Identify conflicts\
-            \ or contradictions\n3. Validate confidence scores\n4. Flag items needing\
-            \ human review\n\nOutput STRICT JSON:\n{\n  \"conflicts_detected\": [],\n\
-            \  \"consistency_score\": 0,\n  \"validation_status\": \"\",\n  \"cross_validated_findings\"\
-            : {\n    \"technical\": {},\n    \"creative\": {},\n    \"stunts\": {},\n\
-            \    \"vfx\": {},\n    \"legal\": {}\n  },\n  \"escalations\": []\n}\n"
+          text: 'You are the Peer Review Coordinator.
+
+
+            Your job:
+
+            1. Cross-check all agent reports for consistency using {{#context#}}
+
+            2. Identify conflicts or contradictions
+
+            3. Validate confidence scores
+
+            4. Flag items needing human review'
         - id: peer-user
           role: user
-          text: 'Review all agent reports for conflicts and consistency.
-
-            '
+          text: Review all agent reports for conflicts and consistency.
         selected: false
         title: 🔄 Peer Review Loop
         type: llm
@@ -1153,11 +1252,11 @@ workflow:
       height: 88
       id: peer_review_loop
       position:
-        x: 1750
-        y: 624
+        x: 2376
+        y: 499
       positionAbsolute:
-        x: 1750
-        y: 624
+        x: 2376
+        y: 499
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1172,6 +1271,12 @@ workflow:
         model:
           completion_params:
             frequency_penalty: 0.5
+            json_schema: "{\n  \"scene_costs\": [\n    {\n      \"scene_number\":\
+              \ 1,\n      \"score\": 0,\n      \"cost_band\": \"$0–$0\",\n      \"\
+              drivers\": []\n    }\n  ],\n  \"total_estimated_range\": {\n    \"low\"\
+              : 0,\n    \"high\": 0,\n    \"above_line\": 0,\n    \"below_line\":\
+              \ 0,\n    \"post_production\": 0,\n  },\n  \"top_cost_drivers\": [],\n\
+              \  \"budget_confidence\": \"0%-0%\",\n}"
             presence_penalty: 0.5
             temperature: 0.2
             top_p: 0.75
@@ -1190,12 +1295,7 @@ workflow:
             \ bands\n4. Do NOT invent cost rules.\n5. Explain scoring briefly per\
             \ scene.\n6. Above the line (cast, director, producer)\n7. Below the line\
             \ (crew, equipment, locations)\n8. Post-production (editing, VFX, sound)\n\
-            9. Contingency (10-15%)\n\n\nOutput STRICT JSON:\n{\n  \"scene_costs\"\
-            : [\n    {\n      \"scene_number\": 1,\n      \"score\": 0,\n      \"\
-            cost_band\": \"$0–$0\",\n      \"drivers\": []\n    }\n  ],\n  \"total_estimated_range\"\
-            : {\n    \"low\": 0,\n    \"high\": 0,\n    \"above_line\": 0,\n    \"\
-            below_line\": 0,\n    \"post_production\": 0,\n  },\n  \"top_cost_drivers\"\
-            : [],\n  \"budget_confidence\": \"0%-0%\",\n}\n"
+            9. Contingency (10-15%)\n"
         - id: budget-user
           role: user
           text: Generate budget estimates based on peer-reviewed findings.
@@ -1207,11 +1307,11 @@ workflow:
       height: 88
       id: budget_simulator
       position:
-        x: 2816
-        y: 705
+        x: 3442
+        y: 580
       positionAbsolute:
-        x: 2816
-        y: 705
+        x: 3442
+        y: 580
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1225,6 +1325,8 @@ workflow:
           - text
         model:
           completion_params:
+            json_schema: "{\n  \"issues\": [],\n  \"severity_scores\": {},\n  \"continuity_confidence\"\
+              : 0.92,\n  \"recommendations\": []\n}"
             temperature: 0.5
           mode: chat
           name: gpt-4o-mini
@@ -1232,11 +1334,18 @@ workflow:
         prompt_template:
         - id: continuity-system
           role: system
-          text: "You are the Continuity & Story Auditor.\n\nUsing data and {{#context#}}\
-            \ Detect:\n- Timeline errors\n- Unresolved setups/payoffs\n- Character\
-            \ arc gaps\n- Tonal inconsistencies\n\nOutput STRICT JSON:\n{\n  \"issues\"\
-            : [],\n  \"severity_scores\": {},\n  \"continuity_confidence\": 0.92,\n\
-            \  \"recommendations\": []\n}\n"
+          text: 'You are the Continuity & Story Auditor.
+
+
+            Using data and {{#context#}} Detect:
+
+            - Timeline errors
+
+            - Unresolved setups/payoffs
+
+            - Character arc gaps
+
+            - Tonal inconsistencies'
         - id: continuity-user
           role: user
           text: 'Audit continuity based on peer-reviewed findings.
@@ -1250,11 +1359,11 @@ workflow:
       height: 88
       id: continuity_auditor
       position:
-        x: 2222
-        y: 530
+        x: 2848
+        y: 405
       positionAbsolute:
-        x: 2222
-        y: 530
+        x: 2848
+        y: 405
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1265,6 +1374,11 @@ workflow:
           enabled: false
         model:
           completion_params:
+            json_schema: "{\n  \"confidence_vector\": {\n    \"narrative\": 0.0,\n\
+              \    \"technical\": 0.0,\n    \"budget\": 0.0,\n    \"legal\": 0.0,\n\
+              \    \"safety\": 0.0,\n    \"overall\": 0.0\n  },\n  \"decision\": \"\
+              PASS / CONDITIONAL_PASS / FAIL\",\n  \"reason\": \"\",\n  \"critical_blockers\"\
+              : [],\n  \"human_review_required\": true/false\n}"
             temperature: 0.5
           mode: chat
           name: gpt-4o-mini
@@ -1272,13 +1386,10 @@ workflow:
         prompt_template:
         - id: gatekeeper-system
           role: system
-          text: "You are THE INTEGRITY GATEKEEPER.\n\nCalculate the CONFIDENCE VECTOR\
-            \ across all dimensions:\n\nOutput STRICT JSON:\n{\n  \"confidence_vector\"\
-            : {\n    \"narrative\": 0.0,\n    \"technical\": 0.0,\n    \"budget\"\
-            : 0.0,\n    \"legal\": 0.0,\n    \"safety\": 0.0,\n    \"overall\": 0.0\n\
-            \  },\n  \"decision\": \"PASS / CONDITIONAL_PASS / FAIL\",\n  \"reason\"\
-            : \"\",\n  \"critical_blockers\": [],\n  \"human_review_required\": true/false\n\
-            }\n"
+          text: 'You are THE INTEGRITY GATEKEEPER.
+
+
+            Calculate the CONFIDENCE VECTOR across all dimensions.'
         - id: gatekeeper-user
           role: user
           text: 'Peer Review Status:
@@ -1307,11 +1418,11 @@ workflow:
       height: 88
       id: integrity_gatekeeper
       position:
-        x: 3178
-        y: 545
+        x: 3804
+        y: 420
       positionAbsolute:
-        x: 3178
-        y: 545
+        x: 3804
+        y: 420
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1319,7 +1430,7 @@ workflow:
       width: 242
     - data:
         selected: false
-        template: '# 🎯 EXECUTIVE RISK DASHBOARD
+        template: '# EXECUTIVE RISK DASHBOARD
 
           ## Human Review Required
 
@@ -1393,11 +1504,11 @@ workflow:
       height: 52
       id: risk_dashboard
       position:
-        x: 3520
-        y: 563
+        x: 4146
+        y: 438
       positionAbsolute:
-        x: 3520
-        y: 563
+        x: 4146
+        y: 438
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1508,11 +1619,11 @@ workflow:
       height: 88
       id: executive_reporting
       position:
-        x: 3862
-        y: 545
+        x: 4488
+        y: 420
       positionAbsolute:
-        x: 3862
-        y: 545
+        x: 4488
+        y: 420
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1546,11 +1657,11 @@ workflow:
       height: 166
       id: end
       position:
-        x: 4204
-        y: 506
+        x: 4830
+        y: 381
       positionAbsolute:
-        x: 4204
-        y: 506
+        x: 4830
+        y: 381
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1569,11 +1680,11 @@ workflow:
       height: 88
       id: '1767960017402'
       position:
-        x: 1388
-        y: 0
+        x: 1657.0973610261171
+        y: 10.038944410446945
       positionAbsolute:
-        x: 1388
-        y: 0
+        x: 1657.0973610261171
+        y: 10.038944410446945
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1632,11 +1743,11 @@ workflow:
       height: 52
       id: '1767960093838'
       position:
-        x: 342
-        y: 315
+        x: 586
+        y: 518
       positionAbsolute:
-        x: 342
-        y: 315
+        x: 586
+        y: 518
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1655,11 +1766,11 @@ workflow:
       height: 88
       id: '1767960664055'
       position:
-        x: 1750
-        y: 792
+        x: 2376
+        y: 667
       positionAbsolute:
-        x: 1750
-        y: 792
+        x: 2376
+        y: 667
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1678,11 +1789,11 @@ workflow:
       height: 88
       id: '1767961107938'
       position:
-        x: 1026
-        y: 1287
+        x: 1652
+        y: 1152.2857142857144
       positionAbsolute:
-        x: 1026
-        y: 1287
+        x: 1652
+        y: 1152.2857142857144
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1696,11 +1807,11 @@ workflow:
       height: 52
       id: '1767968096011'
       position:
-        x: 3178
-        y: 738
+        x: 3804
+        y: 613
       positionAbsolute:
-        x: 3178
-        y: 738
+        x: 3804
+        y: 613
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1732,11 +1843,11 @@ workflow:
       height: 90
       id: '1767973078202'
       position:
-        x: 2454
-        y: 719
+        x: 3080
+        y: 594
       positionAbsolute:
-        x: 2454
-        y: 719
+        x: 3080
+        y: 594
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1753,7 +1864,8 @@ workflow:
           name: gpt-4
           provider: langgenius/openai/openai
         prompt_template:
-        - role: system
+        - id: 09f89c9e-8938-4523-a770-a9421b1f8157
+          role: system
           text: Based on these Peer Review reports (Technical, VFX, Stunts), generate
             3-5 specific search queries to find the exact line-item costs in our internal
             database.
@@ -1765,11 +1877,11 @@ workflow:
       height: 88
       id: '1767984099372'
       position:
-        x: 2112
-        y: 720
+        x: 2738
+        y: 595
       positionAbsolute:
-        x: 2112
-        y: 720
+        x: 2738
+        y: 595
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1978,7 +2090,7 @@ workflow:
             Structured Analysis Input:
 
             {{#context#}}'
-        selected: true
+        selected: false
         title: Initial Analysis Report
         type: llm
         vision:
@@ -1986,11 +2098,11 @@ workflow:
       height: 88
       id: '17680297708350'
       position:
-        x: 1026
-        y: 0
+        x: 1315.0973610261171
+        y: 10.038944410446945
       positionAbsolute:
-        x: 1026
-        y: 0
+        x: 1315.0973610261171
+        y: 10.038944410446945
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -2021,8 +2133,8 @@ workflow:
               \ and storage\"\n            },\n            \"persona\": {\n      \
               \        \"type\": \"string\",\n              \"description\": \"Comprehensive\
               \ system prompt (>200 words) defining the agent's tone, deep domain\
-              \ expertise, and specific step-by-step analytical methodology.\"\n}\"\
-              \n            },\n            \"task\": {\n              \"type\": \"\
+              \ expertise, and specific step-by-step analytical methodology.\"\n \
+              \           },\n            \"task\": {\n              \"type\": \"\
               string\",\n              \"description\": \"Specific analytical task\
               \ this role must perform\"\n            },\n            \"priority\"\
               : {\n              \"type\": \"string\",\n              \"enum\": [\"\
@@ -2177,11 +2289,11 @@ workflow:
       height: 88
       id: '17680335917610'
       position:
-        x: 1026
-        y: 312
+        x: 1656.4258277237452
+        y: -228.63380394419528
       positionAbsolute:
-        x: 1026
-        y: 312
+        x: 1656.4258277237452
+        y: -228.63380394419528
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -2211,11 +2323,11 @@ workflow:
       height: 376
       id: '1768045656157'
       position:
-        x: 1388
-        y: 168
+        x: 1998.4258277237452
+        y: -372.6338039441953
       positionAbsolute:
-        x: 1388
-        y: 168
+        x: 1998.4258277237452
+        y: -372.6338039441953
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -2236,8 +2348,8 @@ workflow:
         x: 60
         y: 88
       positionAbsolute:
-        x: 1448
-        y: 256
+        x: 2058.425827723745
+        y: -284.6338039441953
       selectable: false
       sourcePosition: right
       targetPosition: left
@@ -2326,11 +2438,11 @@ workflow:
       id: '1768046041551'
       parentId: '1768045656157'
       position:
-        x: 204
+        x: 202.3268425982585
         y: 60
       positionAbsolute:
-        x: 1592
-        y: 228
+        x: 2200.7526703220037
+        y: -312.6338039441953
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -2352,11 +2464,11 @@ workflow:
       id: '1768071367930'
       parentId: '1768045656157'
       position:
-        x: 204
+        x: 202.3268425982585
         y: 208
       positionAbsolute:
-        x: 1592
-        y: 376
+        x: 2200.7526703220037
+        y: -164.63380394419528
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -2376,11 +2488,11 @@ workflow:
       height: 88
       id: '1768074108441'
       position:
-        x: 2336
-        y: 312
+        x: 2946.425827723745
+        y: -228.63380394419528
       positionAbsolute:
-        x: 2336
-        y: 312
+        x: 2946.425827723745
+        y: -228.63380394419528
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -2423,18 +2535,181 @@ workflow:
       height: 88
       id: '17680745966700'
       position:
-        x: 1994
-        y: 312
+        x: 2604.425827723745
+        y: -228.63380394419528
       positionAbsolute:
-        x: 1994
-        y: 312
+        x: 2604.425827723745
+        y: -228.63380394419528
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - story_triage
+          - text
+        model:
+          completion_params:
+            json_schema: "{\n  \"agent_id\": \"continuity_agent\",\n  \"timeline_errors\"\
+              : [{ \"scene_range\": \"string\", \"error\": \"string\" }],\n  \"prop_tracking\"\
+              : [\"string\"],\n  \"logic_score\": 0\n}"
+            temperature: 0.5
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: tech-system
+          role: system
+          text: 'STRICT INSTRUCTION: You are part of an agentic chain. Your output
+            will be parsed as JSON and synthesized by a Lead Producer. You must only
+            output valid JSON. Do not include markdown formatting or commentary.
+
+
+            You are the Continuity Agent.
+
+
+            You are the Guardian of Time. Scan for clothing changes, weather shifts,
+            and prop placement. Ensure that if a character is shot in Scene 10, they
+            are bleeding in Scene 11.
+
+            Using {{#context#}} and {{#1767960093838.text#}} analyze the screenplay
+            and flag any logic gaps, other narrative issues.'
+        - id: tech-user
+          role: user
+          text: 'Scope from Architect:
+
+            {{#studio_architect.text#}}
+
+
+            Analyze the screenplay from the knowledge base.'
+        selected: false
+        title: Continuity Agent
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '17680771324070'
+      position:
+        x: 1652
+        y: 1008.8571428571429
+      positionAbsolute:
+        x: 1652
+        y: 1008.8571428571429
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '17680335917610'
+          - text
+        model:
+          completion_params:
+            json_schema: "{\n  \"name\": \"hiring_and_staffing_plan\",\n  \"schema\"\
+              : {\n    \"type\": \"object\",\n    \"required\": [\"project_summary\"\
+              , \"hiring_roster\", \"total_estimated_man_weeks\"],\n    \"properties\"\
+              : {\n      \"project_summary\": { \"type\": \"string\" },\n      \"\
+              hiring_roster\": {\n        \"type\": \"array\",\n        \"items\"\
+              : {\n          \"type\": \"object\",\n          \"required\": [\"role_id\"\
+              , \"job_title\", \"seniority\", \"requirements\", \"duration_weeks\"\
+              , \"headcount\"],\n          \"properties\": {\n            \"role_id\"\
+              : { \"type\": \"string\", \"description\": \"Must match the Architect's\
+              \ role_id\" },\n            \"job_title\": { \"type\": \"string\", \"\
+              description\": \"The professional industry title\" },\n            \"\
+              seniority\": { \"type\": \"string\", \"enum\": [\"Junior\", \"Mid\"\
+              , \"Senior\", \"Executive\"] },\n            \"requirements\": {\n \
+              \             \"type\": \"array\",\n              \"items\": { \"type\"\
+              : \"string\" },\n              \"description\": \"Specific certifications,\
+              \ past experience, or skills needed\"\n            },\n            \"\
+              expectations\": { \"type\": \"string\", \"description\": \"What success\
+              \ looks like for this role\" },\n            \"duration_weeks\": { \"\
+              type\": \"integer\", \"description\": \"Active time needed on the project\"\
+              \ },\n            \"headcount\": { \"type\": \"integer\", \"description\"\
+              : \"Number of people required for this role\" }\n          }\n     \
+              \   }\n      },\n      \"total_estimated_man_weeks\": { \"type\": \"\
+              integer\" }\n    }\n  }\n}"
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: ea48e41c-7025-471f-b75f-dc49f76ed052
+          role: system
+          text: 'You are the Studio HR Lead. You will receive a {{#context#}} containing
+            a list of required agents. Your task is to transform this architectural
+            blueprint into a human-centric Hiring & Resource Strategy.
+
+
+            For every role in the input, you must generate a professional hiring profile
+            that includes seniority, duration, and headcount.
+
+
+            Your Responsibilities:
+
+            Staffing Requirements: Define the exact professional profile for each
+            role identified by the Architect.
+
+            Operational Duration: Estimate how long each role is needed based on the
+            screenplay''s scale and complexity.
+
+            Headcount Logic: Determine if a role requires a single specialist or a
+            sub-team (e.g., a "VFX Lead" vs. a "VFX Department of 5").
+
+            Expertise Level: Assign a seniority level (Junior, Mid, Senior, Executive)
+            based on the risk domains identified.
+
+            Hiring Principles:
+
+            Scale-to-Script: A "Contained" production scale should result in lean
+            staffing; an "Epic" scale justifies a massive department.
+
+            Risk-Based Seniority: High-severity risks (e.g., child actors, complex
+            stunts) require "Executive" or "Senior" level hires with specific certifications.'
+        selected: true
+        structured_output_enabled: true
+        title: Studio HR Agent
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '1768116034235'
+      position:
+        x: 2152.325778866249
+        y: -560.2359631165789
+      positionAbsolute:
+        x: 2152.325778866249
+        y: -560.2359631165789
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs: []
+        selected: false
+        title: Output 7
+        type: end
+      height: 52
+      id: '1768116437210'
+      position:
+        x: 2542.853168069673
+        y: -552.4874038069871
+      positionAbsolute:
+        x: 2542.853168069673
+        y: -552.4874038069871
       selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
       width: 242
     viewport:
-      x: -60.43884716730463
-      y: 362.2952457888589
-      zoom: 0.5103032825858016
+      x: -1113.855458718594
+      y: 649.509759900191
+      zoom: 0.6452812452258887
   rag_pipeline_variables: []
