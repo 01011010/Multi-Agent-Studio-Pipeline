@@ -3,9 +3,52 @@ End-to-end screenplay ingestion with RAG, dynamic agent hiring, peer review loop
 
 **Note:** This workflow is currently in active development. While it functions more as an experimental playground at this stage, it can process a screenplay.pdf to generate the following report:
 
-**Dynamic Agent Orchestration (WIP):** I am currently developing a dynamic persona injection section to move away from fixed, hand-coded agents. The goal is to implement an Architect Agent that scans the input document and dynamically generates a specialized team based on internal blueprints. This section is currently standalone and can be wired into the primary workflow (run parallel, or replaced completely).
-
 **Usage Note:** This workflow has not yet been stress-tested with large-scale documents. To avoid token limits or memory constraints, I recommend implementing a chunking strategy before processing significant files.
+
+**Dynamic Agent Orchestration (WIP):** Currently developing a dynamic persona injection section to move away from fixed, hand-coded agents. The goal is to implement an Architect Agent that scans the input document and dynamically generates a specialized team based on internal blueprints. This section is currently standalone and can be wired into the primary workflow (run parallel, or replaced completely). The outout of the architect is fed into the HR lead, and a hirigin strategy is generated 
+
+# HR Report
+### Hiring & Resource Strategy for Screenplay Production Team for Historical Drama
+
+#### 1. Role: Cultural Sensitivity Advisor
+- **Seniority Level**: Senior
+- **Operational Duration**: 6 months (pre-production through to post-production feedback)
+- **Headcount**: 1 (single specialist)
+- **Rationale**: Given the critical nature of cultural representation in the screenplay, a senior-level advisor is necessary to provide in-depth analysis and ensure respectful, accurate portrayals of race and slavery themes.
+
+#### 2. Role: Historical Consultant
+- **Seniority Level**: Mid
+- **Operational Duration**: 4 months (during the writing and pre-production phases)
+- **Headcount**: 1 (single specialist)
+- **Rationale**: A mid-level consultant can effectively analyze historical accuracy while allowing for creative flexibility. The 4-month duration covers the essential phases of script analysis and scene setting.
+
+#### 3. Role: Practical Effects Supervisor
+- **Seniority Level**: Senior
+- **Operational Duration**: 3 months (pre-production through to the filming of practical effects scenes)
+- **Headcount**: 1 (single specialist)
+- **Rationale**: The practical effects supervisor must have extensive experience to manage the complexities and safety of effects related to butchering and string-making. A senior-level expert is essential for overseeing implementation and ensuring safety protocols are met.
+
+#### 4. Role: Diversity and Inclusion Officer
+- **Seniority Level**: Mid
+- **Operational Duration**: 6 months (ongoing throughout the production)
+- **Headcount**: 1 (single specialist)
+- **Rationale**: A mid-level officer can effectively implement diversity initiatives and engage with community representatives, ensuring that diverse perspectives are integrated throughout the project lifecycle. The duration covers the entire production process to maintain consistent oversight.
+
+### Summary of Staffing Requirements
+| Role                          | Seniority Level | Operational Duration | Headcount |
+|-------------------------------|-----------------|----------------------|-----------|
+| Cultural Sensitivity Advisor  | Senior          | 6 months             | 1         |
+| Historical Consultant         | Mid             | 4 months             | 1         |
+| Practical Effects Supervisor  | Senior          | 3 months             | 1         |
+| Diversity and Inclusion Officer | Mid           | 6 months             | 1         |
+
+### Justification for Headcount and Duration
+- **Cultural Sensitivity Advisor** and **Diversity and Inclusion Officer** are essential for promoting an inclusive environment and ensuring that the screenplay is culturally sensitive and representative, thus warranting their extended involvement throughout pre-production and production.
+- The **Historical Consultant** is crucial during the writing phase to ensure accuracy but may not need to be involved as long as the other roles, allowing for a shorter engagement period.
+- The **Practical Effects Supervisor** is vital during the pre-production and filming stages but may not need to be involved in post-production, justifying a three-month timeline.
+
+This staffing strategy prioritizes expertise and the critical nature of each role in producing a respectful, historically accurate, and inclusive narrative.
+
 
 # EXECUTIVE REPORT SAMPLE
 
